@@ -8,7 +8,7 @@ import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CategoryMapper {
-    @Mapping(target = "id", ignore = true)
+
     CategoryDTO toDto(Category category);
     Category toEntity(CategoryDTO dto);
 }

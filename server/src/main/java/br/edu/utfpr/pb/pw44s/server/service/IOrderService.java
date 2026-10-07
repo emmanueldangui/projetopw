@@ -8,7 +8,7 @@ public interface IOrderService {
 
     Order save(Order order);
 
-    List<Order> findAllByUserUsername(String username);
+    List<Order> findByAuthenticatedUser();
 
-    Order findById(Long id);
+    Order findByIdAndAuthenticatedUser(Long id);
 }

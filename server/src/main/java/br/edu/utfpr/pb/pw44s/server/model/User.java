@@ -1,11 +1,13 @@
 package br.edu.utfpr.pb.pw44s.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -50,8 +52,10 @@ public class User implements UserDetails {
     private List<Address> addresses = new ArrayList<>();
 
     @Override
+    @Transient
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return AuthorityUtils.createAuthorityList("ROLE_USER");
     }
 
     @Override

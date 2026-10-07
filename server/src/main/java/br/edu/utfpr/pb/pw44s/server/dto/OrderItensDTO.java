@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.pw44s.server.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -15,10 +16,13 @@ public class OrderItensDTO {
     private Long id;
 
     @NotNull
-    private Integer quantity;
+    private Long productId;
+
+    private String productName;
 
     @NotNull
-    private BigDecimal price;
+    @Min(1)
+    private Integer quantity;
 
-    private Long productId;
+    private BigDecimal price;
 }

@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "tb_address")
 @AllArgsConstructor
@@ -24,25 +22,29 @@ public class Address {
     private String street;
 
     @NotNull
-    @Column(length = 50)
-    private String city;
-
-    @NotNull
-    @Column(length = 50)
-    private String state;
-
-    @NotNull
-    @Column(length = 20)
-    private String zipcode;
-
-    @NotNull
     @Column(length = 10)
-    private int number;
+    private String number;
 
     @Column(length = 100)
     private String complement;
 
+    @Column(length = 50)
+    private String neighborhood;
+
+    @NotNull
+    @Column(length = 50)
+    private String city;
+
+    @NotNull
+    @Column(length = 2)
+    private String state;
+
+    @NotNull
+    @Column(length = 9)
+    private String zipCode;
+
     @JsonIgnore
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

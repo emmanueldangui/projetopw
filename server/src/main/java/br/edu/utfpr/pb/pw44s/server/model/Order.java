@@ -1,10 +1,10 @@
 package br.edu.utfpr.pb.pw44s.server.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,15 +23,28 @@ public class Order {
     @NotNull
     private LocalDateTime dateTime;
 
+    @NotNull
+    @Column(length = 30)
+    private String paymentMethod;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItems> orderItems;
-
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItems> orderItems;
+
+    @Transient
+    public BigDecimal getTotal() {
+        if (orderItems == null) {
+            return BigDecimal.ZERO;
+        }
+        return orderItems.stream()
+                .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

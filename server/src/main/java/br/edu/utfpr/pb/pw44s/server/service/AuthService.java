@@ -2,6 +2,7 @@ package br.edu.utfpr.pb.pw44s.server.service;
 
 import br.edu.utfpr.pb.pw44s.server.model.User;
 import br.edu.utfpr.pb.pw44s.server.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,5 +24,10 @@ public class AuthService implements UserDetailsService {
             throw new UsernameNotFoundException("Usuário não encontrado!");
         }
         return user;
+    }
+
+    public User getAuthenticatedUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findUserByUsername(username);
     }
 }

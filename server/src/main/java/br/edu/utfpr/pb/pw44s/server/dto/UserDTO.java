@@ -1,7 +1,6 @@
 package br.edu.utfpr.pb.pw44s.server.dto;
 
-import br.edu.utfpr.pb.pw44s.server.model.Address;
-import jakarta.persistence.OneToMany;
+import br.edu.utfpr.pb.pw44s.server.annotation.UniqueUsername;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -9,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -24,6 +21,7 @@ public class UserDTO {
 
     @NotNull
     @Size(min = 4, max = 50)
+    @UniqueUsername
     private String username;
 
     @NotNull
@@ -35,6 +33,4 @@ public class UserDTO {
     @Size(min = 6)
     @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
     private String email;
-
-    private List<Address> addresses;
 }

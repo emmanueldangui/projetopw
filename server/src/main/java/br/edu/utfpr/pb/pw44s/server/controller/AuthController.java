@@ -1,8 +1,7 @@
 package br.edu.utfpr.pb.pw44s.server.controller;
 
-import br.edu.utfpr.pb.pw44s.server.dto.UserDTO;
-import br.edu.utfpr.pb.pw44s.server.mapper.UserMapper;
 import br.edu.utfpr.pb.pw44s.server.model.User;
+import br.edu.utfpr.pb.pw44s.server.security.dto.UserResponseDTO;
 import br.edu.utfpr.pb.pw44s.server.service.AuthService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,20 +14,14 @@ import java.security.Principal;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserMapper userMapper;
 
-    public AuthController(AuthService authService, UserMapper userMapper) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
-        this.userMapper = userMapper;
     }
 
     @GetMapping("user-info")
-    public UserDTO getUserInfo(Principal principal) {
-        String username = principal.getName();
-        // ou
-        // String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = (User) authService.loadUserByUsername(username);
-        return userMapper.toDTO(user);
+    public UserResponseDTO getUserInfo(Principal principal) {
+        User user = (User) authService.loadUserByUsername(principal.getName());
+        return new UserResponseDTO(user);
     }
 }
-

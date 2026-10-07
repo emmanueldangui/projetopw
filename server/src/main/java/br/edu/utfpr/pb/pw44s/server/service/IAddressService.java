@@ -18,4 +18,8 @@ public interface IAddressService {
     long count();
 
     List<Address> findByUserId(Long userId);
+
+    List<Address> findByAuthenticatedUser();
+
+    Address findByIdAndAuthenticatedUser(Long id);
 }

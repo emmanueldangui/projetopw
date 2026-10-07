@@ -23,9 +23,9 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createUser(@Valid @RequestBody UserDTO UserDTO) {
-        User user = userMapper.toEntity(UserDTO);
+    public void createUser(@Valid @RequestBody UserDTO userDTO) {
+        User user = userMapper.toEntity(userDTO);
         userService.save(user);
-        log.info("User created: {}", user);
+        log.info("User created: {}", user.getUsername());
     }
 }
