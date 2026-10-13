@@ -27,16 +27,22 @@ public class ProductController {
         this.productMapper = productMapper;
     }
 
+    // http://localhost:8080/products
+    // http://localhost:8080/products?categoryId=3
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> findAll() {
+    public ResponseEntity<List<ProductDTO>> findAll(@RequestParam(required = false) Long categoryId) {
+        List<Product> products = (categoryId != null)
+                ? iProductService.findByCategoryId(categoryId)
+                : iProductService.findAll();
+
         return ResponseEntity.ok(
-                iProductService.findAll()
-                        .stream()
+                products.stream()
                         .map(productMapper::toDTO)
                         .collect(Collectors.toList())
         );
     }
 
+    // http://localhost:8080/products/1
     @GetMapping("{id}")
     public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
         Product product = iProductService.findById(id);
@@ -48,11 +54,13 @@ public class ProductController {
         }
     }
 
+    // http://localhost:8080/products/page?page=0&size=2&order=price&asc=true&categoryId=3
     @GetMapping("page")
     public ResponseEntity<Page<ProductDTO>> findPage(@RequestParam int page,
                                                      @RequestParam int size,
                                                      @RequestParam(required = false) String order,
-                                                     @RequestParam(required = false) Boolean asc) {
+                                                     @RequestParam(required = false) Boolean asc,
+                                                     @RequestParam(required = false) Long categoryId) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         if (order != null && asc != null) {
@@ -60,7 +68,10 @@ public class ProductController {
                     asc ? Sort.Direction.ASC : Sort.Direction.DESC, order);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(
-                iProductService.findAll(pageRequest).map(productMapper::toDTO));
+        Page<Product> products = (categoryId != null)
+                ? iProductService.findByCategoryId(categoryId, pageRequest)
+                : iProductService.findAll(pageRequest);
+
+        return ResponseEntity.status(HttpStatus.OK).body(products.map(productMapper::toDTO));
     }
 }

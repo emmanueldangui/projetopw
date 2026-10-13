@@ -6,9 +6,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = CategoryMapper.class)
 public interface ProductMapper {
+
     @Mapping(target = "id", ignore = true)
     Product toEntity(ProductDTO dto);
+
     ProductDTO toDTO(Product product);
 }
